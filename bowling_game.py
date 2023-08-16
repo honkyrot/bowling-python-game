@@ -1,7 +1,7 @@
 """Recreated/Rewrote bowling, by honkyrot
 2 Files are needed, this file and bowling_core
 test_bowling.py and highest_game.py is optional.
-Best read if you have a mono type font.
+Best read if you have a monotype font.
 
 NOT RECOMMENDED TO BATCH RUN OVER 1000 TIMES.
 SAVING STILL NEEDS TO BE MORE EFFICIENT.
@@ -32,7 +32,8 @@ import bowling_core as BowlingGame
 save_file = pathlib.Path("bowling_save.json")
 
 
-def read_loaded_save():
+def read_loaded_save() -> None:
+    """Reads loaded save file."""
     loading_save_content = save_file.read_text()
     loading_save_data = json.loads(loading_save_content)
     for key, data in loading_save_data["game_history"].items():
@@ -47,7 +48,8 @@ def read_loaded_save():
         print(f"Game: {data_clone_game} - Score: {data_clone_score} - {data[0]}")
 
 
-def y_n_response(input_message):
+def y_n_response(input_message) -> bool:
+    """Returns True if user input is y, False if n."""
     while True:
         start_input = input(input_message).lower()
         if start_input == "y":
@@ -57,7 +59,7 @@ def y_n_response(input_message):
 
 
 user_play = y_n_response("Do you want to play bowling? (y/n)\n>")
-if user_play:
+if user_play:  # start game
     user_manual = y_n_response("Do you want to have manual input on score? (y/n)\n>")
     user_show_debug = y_n_response("Do you want to see debug messages (prevents saving)? (y/n)\n>")
     user_auto = False

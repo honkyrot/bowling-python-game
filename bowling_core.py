@@ -8,6 +8,7 @@ save_file = pathlib.Path("bowling_save.json")
 
 
 class BowlingGame:
+    """ Core of the Bowling game"""
     def __init__(self):
         self.total_score = 0
         self.end_game = False
@@ -25,7 +26,7 @@ class BowlingGame:
         self.current_game = 0
         self.game_history = {}
 
-    def get_game_stats_full(self):
+    def get_game_stats_full(self):  # Full stats
         return f"""=====FINAL=====
 {self.readable_scoreboard()}
 TOTAL SCORE: {self.calculate_score()}
@@ -33,13 +34,13 @@ GAMES PLAYED: {self.current_game}
 COMBINED SCORE: {self.total_score}
 ==============="""
 
-    def get_game_stats_mini(self):
+    def get_game_stats_mini(self):  # Mini stats
         return f"""===============
 Current roll: {self.current_frame_roll}
 Current frame: {self.current_frame}
 ==============="""
 
-    def print_debug(self):
+    def print_debug(self):  # Debug
         print(f"""\n===============DEBUG
 scoreboard {self.scoreboard}
 hit_score {self.hit_score}
@@ -50,24 +51,24 @@ conv_score {self.final_score_str}\n
 ===============""")
 
     @staticmethod
-    def clamp(num, min_value, max_value):  # Clamp values
+    def clamp(num, min_value, max_value) -> int:  # Clamp values
         return max(min(num, max_value), min_value)
 
-    def reset_pins(self):
+    def reset_pins(self) -> None:
         """Reset pins"""
         self.current_pins = 10
         self.knocked_pins = 0
         self.hit_score = []
 
-    def increment_frame(self):
+    def increment_frame(self) -> None:
         """Increment frame"""
         self.current_frame += 1
 
-    def increment_score(self, score):
+    def increment_score(self, score) -> None:
         """Increment score"""
         self.score += score
 
-    def check_frame(self):
+    def check_frame(self) -> None:
         """Check if frame is over"""
         if self.current_frame < 10:
             if self.knocked_pins == 10:
@@ -103,7 +104,7 @@ conv_score {self.final_score_str}\n
                 print("Maximum rolls 3/3 reached!")
                 self.end_game = True
 
-    def roll_ball(self, manual):
+    def roll_ball(self, manual) -> None:
         """Roll the ball"""
         self.current_frame_roll += 1
         if manual or manual == 0:
@@ -118,7 +119,7 @@ conv_score {self.final_score_str}\n
             self.final_hit_score.append(self.knocked_pins)
         self.check_frame()
 
-    def calculate_score(self):
+    def calculate_score(self) -> int:
         """shitty code, but it works
         score calculation"""
         for key, data in self.scoreboard.items():
@@ -169,7 +170,7 @@ conv_score {self.final_score_str}\n
 #            print(key, data, self.score)
         return self.score
 
-    def readable_scoreboard(self):
+    def readable_scoreboard(self) -> str:
         """Prints the scoreboard in a readable format"""
         final_string = ""
         for keys, data in self.scoreboard.items():
@@ -200,18 +201,18 @@ conv_score {self.final_score_str}\n
         self.final_str = final_string
         return final_string
 
-    def save_scoreboard(self):
+    def save_scoreboard(self) -> None:
         """Saves the scoreboard to a file"""
         self.game_history.update({self.current_game: [self.final_str, self.score]})
 
     @staticmethod
-    def new_save():
+    def new_save() -> None:
         """Creates a new save file"""
         new_save_data = {"current_game": 0, "total_score": 0, "game_history": {}}
         new_content = json.dumps(new_save_data)
         save_file.write_text(new_content)
 
-    def save_game(self):
+    def save_game(self) -> None:
         """Saves the game to a file"""
         loaded_save_content = save_file.read_text()
         loaded_save_data = json.loads(loaded_save_content)
@@ -221,7 +222,7 @@ conv_score {self.final_score_str}\n
         saving_content = json.dumps(saving_save_data)
         save_file.write_text(saving_content)
 
-    def load_game(self):
+    def load_game(self) -> None:
         """Loads the game from a file"""
         loading_save_content = save_file.read_text()
         loading_save_data = json.loads(loading_save_content)
